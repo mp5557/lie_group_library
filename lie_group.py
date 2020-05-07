@@ -26,7 +26,16 @@ def LieExp(v):
 def LieLog(V):
     a = la.null_space(V - np.eye(3))[:, 0]
     c = (np.trace(V) - 1) / 2
-    s = Vee(V - c * np.eye(3) - (1 - c) * a * a.reshape((3, 1))) @ a
+    # s = Vee(V - c * np.eye(3) - (1 - c) * a * a.reshape((3, 1))) @ a
+
+    # s =  (V[2, 1] - (1 - c) * a[2] * a[1]) * a[0]
+    # s += (V[0, 2] - (1 - c) * a[0] * a[2]) * a[1] 
+    # s += (V[1, 0] - (1 - c) * a[1] * a[0]) * a[2]
+
+    s = -3 * (1 - c) * a[0] * a[1] * a[2]
+    s += V[2, 1] * a[0]
+    s += V[0, 2] * a[1]
+    s += V[1, 0] * a[2]
     return np.arctan2(s, c) * a
 
 
