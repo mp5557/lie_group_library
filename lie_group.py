@@ -9,6 +9,10 @@ def Hat(v):
                      [-v[1], v[0],   0.]])
 
 
+def Vee(H):
+    return np.array([H[2, 1], H[0, 2], H[1, 0]])
+
+
 def LieExp(v):
     t = la.norm(v)
     if t < 1e-5:
@@ -20,9 +24,10 @@ def LieExp(v):
 
 
 def LieLog(V):
-    t = acos((np.trace(V) - 1) / 2)
     a = la.null_space(V - np.eye(3))[:, 0]
-    return t * a
+    c = (np.trace(V) - 1) / 2
+    s = Vee(V - c * np.eye(3) - (1 - c) * a * a.reshape((3, 1))) @ a
+    return np.arctan2(s, c) * a
 
 
 def RoundToRotation(C):
